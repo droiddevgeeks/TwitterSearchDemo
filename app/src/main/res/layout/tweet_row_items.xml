@@ -20,15 +20,20 @@
             <ImageView
                 android:id="@+id/img_profile"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_weight="0.5"
                 android:contentDescription="@null"
                 android:src="@mipmap/ic_launcher" />
 
+            <View
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
+                android:layout_height="match_parent"/>
+
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.5">
+                android:layout_weight="1.4">
 
                 <RelativeLayout
                     android:layout_width="match_parent"

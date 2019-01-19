@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">TwitterSearchDemo</string>
+    <string name="app_name">TwitterSearch</string>
+    <string name="appname">Twitter Search</string>
     <string name="search_hint">Enter your hash tag</string>
     <string name="retweet">Retweet : </string>
     <string name="favourite">Favourite : </string>
     <string name="internet_error">Please check your internet connection</string>
     <string name="some_error">Something wend wrong</string>
+    <string name="sort">SORT</string>
 </resources>

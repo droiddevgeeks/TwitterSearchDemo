@@ -24,16 +24,60 @@
         style="@style/Widget.AppCompat.TextView.SpinnerItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="gone"
-        android:layout_centerInParent="true" />
-
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_tweet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_above="@+id/ll_sort"
         android:layout_below="@+id/line"
         android:layout_margin="@dimen/margin_small" />
+
+    <LinearLayout
+        android:id="@+id/ll_sort"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:visibility="gone"
+        android:weightSum="3">
+
+
+        <TextView
+            android:id="@+id/tv_sort_up"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableEnd="@drawable/ic_arrow_upward_black_24dp"
+            android:gravity="center"
+            android:padding="@dimen/margin_medium"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.5"
+            android:gravity="center"
+            android:padding="@dimen/margin_medium"
+            android:text="@string/sort"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_sort_down"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:drawableStart="@drawable/ic_arrow_downward_black_24dp"
+            android:padding="@dimen/margin_medium"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+    </LinearLayout>
 
 </RelativeLayout>

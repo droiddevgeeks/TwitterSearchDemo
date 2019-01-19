@@ -16,8 +16,8 @@ public class TwitterApiClient {
         this.api = api;
     }
 
-    public Single<TweetList> getTweetList(String authorization, String hashtag) {
-        return api.getTweetList(authorization, hashtag);
+    public Single<TweetList> getTweetList(String authorization, String hashtag, String rpp) {
+        return api.getTweetList(authorization, hashtag, rpp);
     }
 
     public Single<TokenType> getToken(String authorization, String grantType) {

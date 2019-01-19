@@ -1,5 +1,6 @@
 package com.example.twittersearchdemo.api;
 
+import io.reactivex.ObservableTransformer;
 import io.reactivex.Single;
 import io.reactivex.SingleSource;
 import io.reactivex.SingleTransformer;
@@ -10,16 +11,12 @@ public interface RxSingleSchedulers {
   RxSingleSchedulers DEFAULT = new RxSingleSchedulers() {
     @Override
     public <T> SingleTransformer<T, T> applySchedulers() {
-      return new SingleTransformer<T, T>() {
-        @Override
-        public SingleSource<T> apply(final Single<T> single) {
-          return single
-              .subscribeOn(Schedulers.io())
-              .observeOn(AndroidSchedulers.mainThread());
-        }
-      };
+      return single -> single
+          .subscribeOn(Schedulers.io())
+          .observeOn(AndroidSchedulers.mainThread());
     }
   };
+
 
   RxSingleSchedulers TEST = new RxSingleSchedulers() {
     @Override

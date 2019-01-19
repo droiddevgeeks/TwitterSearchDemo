@@ -14,7 +14,7 @@ import retrofit2.http.Query;
 public interface TwitterApi {
 
     @GET(ApiConstants.TWITTER_HASHTAG_URL)
-    Single<TweetList> getTweetList(@Header("Authorization") String authorization, @Query("q") String hashtag);
+    Single<TweetList> getTweetList(@Header("Authorization") String authorization, @Query("q") String hashtag, @Query("count")String rpp);
 
     @FormUrlEncoded
     @POST(ApiConstants.TWITTER_TOKEN_URL)

@@ -15,13 +15,14 @@ public class RxSearchObservable {
             @Override
             public boolean onQueryTextSubmit(String s) {
                 subject.onComplete();
-                return true;
+                searchView.clearFocus();
+                return false;
             }
 
             @Override
             public boolean onQueryTextChange(String text) {
                 subject.onNext(text);
-                return true;
+                return false;
             }
         });
 

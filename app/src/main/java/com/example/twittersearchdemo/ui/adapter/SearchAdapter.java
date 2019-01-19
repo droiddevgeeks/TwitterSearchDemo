@@ -29,7 +29,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TweetViewH
 
 
     public void addTweetList(List<Tweet> tweetList) {
-        this.tweetList = tweetList;
+        if (!this.tweetList.isEmpty()) {
+            this.tweetList.clear();
+        }
+        this.tweetList.addAll(tweetList);
         notifyDataSetChanged();
     }
 

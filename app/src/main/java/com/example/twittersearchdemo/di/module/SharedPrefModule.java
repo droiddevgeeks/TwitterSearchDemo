@@ -13,12 +13,10 @@ import dagger.Provides;
 @Module
 public class SharedPrefModule {
 
-    private final String MY_PREF = "TWITTER_SEARCH_PREF";
-
     @AppScope
     @Provides
     SharedPrefHelper provideSharedPrefHelper(MyApp app) {
-        return new SharedPrefHelper(app.getSharedPreferences(MY_PREF, Context.MODE_PRIVATE));
+        return new SharedPrefHelper(app.getSharedPreferences("TWITTER_SEARCH_PREF", Context.MODE_PRIVATE));
     }
 
     @AppScope
