@@ -4,13 +4,10 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.example.twittersearchdemo.R;
 import com.example.twittersearchdemo.api.model.Tweet;
+import com.example.twittersearchdemo.databinding.TweetRowItemsBinding;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -39,19 +36,15 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TweetViewH
     @NonNull
     @Override
     public TweetViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = layoutInflater.inflate(R.layout.tweet_row_items, viewGroup, false);
-        return new TweetViewHolder(view);
+        return new TweetViewHolder(TweetRowItemsBinding.inflate(layoutInflater, viewGroup, false));
     }
 
     @Override
     public void onBindViewHolder(@NonNull TweetViewHolder tweetViewHolder, int i) {
 
         Tweet tweet = tweetList.get(i);
-        tweetViewHolder.name.setText(tweet.user.name + " ( " + tweet.user.screenName + " ) ");
-        tweetViewHolder.tweetText.setText(tweet.text);
-        tweetViewHolder.retweetCount.setText(tweet.retweet_count);
-        tweetViewHolder.favcount.setText(tweet.favorite_count);
-        Picasso.with(context).load(tweet.user.profileImageUrl).into(tweetViewHolder.profileImage);
+        tweetViewHolder.binding.setTweet(tweet);
+        Picasso.with(context).load(tweet.user.profileImageUrl).into(tweetViewHolder.binding.imgProfile);
     }
 
     @Override
@@ -61,20 +54,11 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.TweetViewH
 
     static final class TweetViewHolder extends RecyclerView.ViewHolder {
 
-        private ImageView profileImage;
-        private TextView name;
-        private TextView tweetText;
-        private TextView retweetCount;
-        private TextView favcount;
+        private final TweetRowItemsBinding binding;
 
-        public TweetViewHolder(@NonNull View itemView) {
-            super(itemView);
-
-            name = (TextView) itemView.findViewById(R.id.tv_Name);
-            profileImage = (ImageView) itemView.findViewById(R.id.img_profile);
-            tweetText = (TextView) itemView.findViewById(R.id.tv_tweet);
-            retweetCount = (TextView) itemView.findViewById(R.id.tv_retweet_count);
-            favcount = (TextView) itemView.findViewById(R.id.tv_fav_count);
+        public TweetViewHolder(TweetRowItemsBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
         }
     }
 }

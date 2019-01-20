@@ -6,18 +6,12 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 
 import com.example.twittersearchdemo.R;
 import com.example.twittersearchdemo.api.TwitterViewModelFactory;
 import com.example.twittersearchdemo.base.BaseFragment;
+import com.example.twittersearchdemo.databinding.FragmentSearchBinding;
 import com.example.twittersearchdemo.local.SharedPrefDataManager;
 import com.example.twittersearchdemo.ui.adapter.SearchAdapter;
 import com.example.twittersearchdemo.ui.viewmodel.SearchViewModel;
@@ -36,13 +30,9 @@ import io.reactivex.disposables.Disposable;
 
 import static android.widget.LinearLayout.HORIZONTAL;
 
-public class SearchFragment extends BaseFragment implements View.OnClickListener {
-
-    private SearchView tweetSearchView;
-    private LinearLayout tweetSort;
+public class SearchFragment extends BaseFragment<FragmentSearchBinding> {
 
     private SearchAdapter tweetSearchAdapter;
-    private ProgressBar progressBar;
     private Disposable disposable;
     private SearchViewModel searchViewModel;
 
@@ -59,10 +49,9 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
         searchViewModel = ViewModelProviders.of(this, viewModelFactory).get(SearchViewModel.class);
     }
 
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_search, container, false);
+    public int getLayout() {
+        return R.layout.fragment_search;
     }
 
 
@@ -70,21 +59,15 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        progressBar = (ProgressBar) view.findViewById(R.id.progress);
-        tweetSearchView = (SearchView) view.findViewById(R.id.sv_tweet);
-        tweetSort = (LinearLayout) view.findViewById(R.id.ll_sort);
-        RecyclerView tweetRecyclerView = (RecyclerView) view.findViewById(R.id.rv_tweet);
-        TextView tweetSortUp = (TextView) view.findViewById(R.id.tv_sort_up);
-        TextView tweetSortDown = (TextView) view.findViewById(R.id.tv_sort_down);
-
         tweetSearchAdapter = new SearchAdapter(getContext(), new ArrayList<>());
-        tweetRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        tweetRecyclerView.addItemDecoration(new DividerItemDecoration(getContext(), HORIZONTAL));
-        tweetRecyclerView.setAdapter(tweetSearchAdapter);
+        binding.rvTweet.setLayoutManager(new LinearLayoutManager(getContext()));
+        binding.rvTweet.addItemDecoration(new DividerItemDecoration(getContext(), HORIZONTAL));
+        binding.rvTweet.setAdapter(tweetSearchAdapter);
 
 
-        tweetSortUp.setOnClickListener(this);
-        tweetSortDown.setOnClickListener(this);
+        binding.setDownClickListener(click -> searchViewModel.sortTweetByPopularity(false));
+        binding.setUpClickListener(click -> searchViewModel.sortTweetByPopularity(true));
+
     }
 
     @Override
@@ -96,7 +79,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
     private void observeSearchView() {
 
-        disposable = RxSearchObservable.fromview(tweetSearchView)
+        disposable = RxSearchObservable.fromview(binding.svTweet)
                 .debounce(300, TimeUnit.MILLISECONDS)
                 .filter(text -> !text.isEmpty() && text.length() >= 3)
                 .map(text -> text.toLowerCase().trim())
@@ -122,7 +105,7 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
         searchViewModel.apiTokenData().observe(getViewLifecycleOwner(), token -> {
             localDataManager.setAccessToken(token.access_token);
-            searchViewModel.fetchTweet(token.access_token, tweetSearchView.getQuery().toString());
+            searchViewModel.fetchTweet(token.access_token, binding.svTweet.getQuery().toString());
         });
 
         searchViewModel.apiError().observe(getViewLifecycleOwner(), error -> {
@@ -132,13 +115,15 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
         searchViewModel.loading().observe(getViewLifecycleOwner(), isLoading -> {
             if (isLoading)
-                progressBar.setVisibility(View.VISIBLE);
+                binding.setShowLoading(true);
             else
-                progressBar.setVisibility(View.GONE);
+                binding.setShowLoading(false);
         });
 
         searchViewModel.apiTweetData().observe(getViewLifecycleOwner(), tweetList -> {
-            tweetSort.setVisibility(View.VISIBLE);
+
+            binding.setShowSorting(true);
+            binding.svTweet.clearFocus();
             tweetSearchAdapter.addTweetList(tweetList.tweets);
         });
 
@@ -149,24 +134,8 @@ public class SearchFragment extends BaseFragment implements View.OnClickListener
 
 
     @Override
-    public void onClick(View v) {
-
-        switch (v.getId()) {
-            case R.id.tv_sort_up:
-                searchViewModel.sortTweetByPopularity(true);
-                break;
-            case R.id.tv_sort_down:
-                searchViewModel.sortTweetByPopularity(false);
-                break;
-        }
-
-    }
-
-
-    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (disposable != null) disposable.dispose();
     }
-
 }

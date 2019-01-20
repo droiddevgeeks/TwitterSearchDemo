@@ -22,4 +22,31 @@ public class Tweet {
     @SerializedName("user")
     public TwitterUser user;
 
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public String getRetweet_count() {
+        return retweet_count;
+    }
+
+    public String getFavorite_count() {
+        return favorite_count;
+    }
+
+    public TwitterUser getUser() {
+        return user;
+    }
 }
